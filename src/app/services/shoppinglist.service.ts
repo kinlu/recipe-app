@@ -9,11 +9,7 @@ export class ShoppinglistService {
   startedEditing = new Subject<number>();
 
 
-  public ingredients: Ingredient[] = [
-    new Ingredient("Apple", 10),
-    new Ingredient("Tomatoes", 10),
-    new Ingredient("Pears", 10)
-  ];
+  public ingredients: Ingredient[] = [];
 
 
   getIngredient(index: number): Ingredient {

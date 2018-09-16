@@ -6,6 +6,12 @@
   box-shadow: 10px 10px 5px -4px rgba(0, 0, 0, 0.13);
 }
 
+li button {
+  width: 100%;
+  margin: 0;
+  border: 0;
+  text-align: left;
+}
 
 img.img-responsive {
   margin-top: 80px;
