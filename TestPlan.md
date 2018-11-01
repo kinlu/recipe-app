@@ -11,7 +11,7 @@ Aligning with the test pyramid model, the test plan will pursue more amount of u
 
 Unit tests will be applied to those components with logics inside.
 
-To achieve isolation, the dependent serice modules will be stubbed in unit tests.  The stubs are supported by [sinon](https://sinonjs.org/releases/latest/).
+To achieve isolation, the dependent service modules will be stubbed in unit tests.  The stubs are supported by [sinon](https://sinonjs.org/releases/latest/).
 
 TestBed from angular is adopted to support the unit tests.
 
