@@ -14,7 +14,7 @@ import { Observable } from 'rxjs/Observable';
 
 const sinon = require('sinon')
 
-describe('RecipeEdit - edit existing recipe', () => {
+describe('RecipeEdit - edit existing recipe - unit test', () => {
   let params: Observable<Params>;
   let fixture: ComponentFixture<RecipeEditComponent>;
   let component: RecipeEditComponent;
@@ -116,7 +116,7 @@ describe('RecipeEdit - edit existing recipe', () => {
 
 })
 
-describe('RecipeEdit - validation', () => {
+describe('RecipeEdit - validation  - unit test', () => {
   let params: Observable<Params>;
   let fixture: ComponentFixture<RecipeEditComponent>;
   let component: RecipeEditComponent;
@@ -182,7 +182,7 @@ describe('RecipeEdit - validation', () => {
 
 })
 
-describe('RecipeEdit - add new recipe', () => {
+describe('RecipeEdit - add new recipe  - unit test', () => {
   let params: Observable<Params>;
   let fixture: ComponentFixture<RecipeEditComponent>;
   let component: RecipeEditComponent;
@@ -240,5 +240,61 @@ describe('RecipeEdit - add new recipe', () => {
     component.deleteIngredient(0);
     expect(component.recipeEditForm._value.ingredients.length).toEqual(0)
   })
+
+})
+
+describe('RecipeEdit - edit existing recipe - integration test', () => {
+  let params: Observable<Params>;
+  let fixture: ComponentFixture<RecipeEditComponent>;
+  let component: RecipeEditComponent;
+  let router;
+  
+  beforeEach(async(() => {
+    params = of({
+      id: '0'
+    });
+
+    router = sinon.createStubInstance(Router);
+    router.navigate.withArgs(['/recipes', 0]).returnsThis();
+    router.navigate.withArgs(['/recipes']).returnsThis();
+
+    TestBed.configureTestingModule({
+      declarations: [RecipeEditComponent],
+      providers: [
+        { provide: ActivatedRoute, useValue: {params} },
+        { provide: Router, useValue: router },
+        RecipeService
+      ],
+      imports: [ReactiveFormsModule, FormsModule]
+    });
+    fixture = TestBed.createComponent(RecipeEditComponent);
+
+    component = fixture.componentInstance;
+
+    component.ngOnInit(); 
+
+  }));
+
+  it('should init a form with the existing recipe', () => {
+    expect(component.recipeEditForm.value.name).toBe('Chinese Chicken');
+  })
+
+  it('should add an empty ingredient in the form', () => {
+    component.onAddIngredient();
+
+    const new_ingrediaent = {
+      name: 'Chinese toufu',
+      amount: 5
+    }
+    component.recipeEditForm.value.ingredients[2].name = new_ingrediaent.name;
+    component.recipeEditForm.value.ingredients[2].amount = new_ingrediaent.amount;
+
+    component.onSubmit();
+
+    expect(component.recipeService.getRecipe(0).ingredients[2].name).toBe(new_ingrediaent.name)
+
+    expect(component.recipeService.getRecipe(0).ingredients[2].amount).toBe(new_ingrediaent.amount)
+  })
+
 
 })

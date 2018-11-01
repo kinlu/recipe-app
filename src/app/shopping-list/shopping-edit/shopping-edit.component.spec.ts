@@ -13,13 +13,11 @@ import {
 
 const sinon = require('sinon')
 
-describe('Shopping Edit', () => {
+describe('Shopping Edit - unit test', () => {
 
   let fixture: ComponentFixture<ShoppingEditComponent>;
   let component: ShoppingEditComponent;
-  let recipe;
   let shoppingListService;
-  let router;
   let ingredient: Ingredient;
   
   
@@ -133,4 +131,89 @@ describe('Shopping Edit', () => {
   afterEach(()=>{
     component.ngOnDestroy();
   })
+})
+
+describe('Shopping Edit - integration test', () => {
+
+  let fixture: ComponentFixture<ShoppingEditComponent>;
+  let component: ShoppingEditComponent;
+  let ingredient: Ingredient;
+  
+  
+  beforeEach(async(() => {
+
+    ingredient = <Ingredient>{
+      name : 'ingredient 1',
+      amount: 1
+    }
+
+    TestBed.configureTestingModule({
+      declarations: [ShoppingEditComponent],
+      providers: [
+        ShoppinglistService,
+      ],
+      imports: [ReactiveFormsModule, FormsModule]
+    });
+
+    fixture = TestBed.createComponent(ShoppingEditComponent);
+    component = fixture.componentInstance;
+    fixture.detectChanges();
+    fixture.whenStable().then(()=>{
+      component.ngOnInit(); 
+    })
+
+  }));
+
+  it('should init a form with values when start editing', ()=>{
+    component.shoppinglistService.addIngredients(ingredient);
+    component.shoppinglistService.startedEditing.next(0);
+    
+    fixture.detectChanges();
+    fixture.whenStable().then(()=>{
+      expect(component.editedItemIndex).toBe(0);
+      expect(component.editMode).toBe(true);
+      expect(component.editedItem.name).toBe(ingredient.name);
+      expect(component.editedItem.amount).toBe(ingredient.amount);
+      expect(component.slForm.value.name).toBe(ingredient.name);
+      expect(component.slForm.value.amount).toBe(ingredient.amount);
+    })
+
+  });
+
+  it('should add an ingredient when the editMode is off', ()=>{
+    component.shoppinglistService.addIngredients(ingredient);
+    component.shoppinglistService.startedEditing.next(0);
+    component.editMode = false;
+
+    fixture.detectChanges();
+    fixture.whenStable().then(()=>{
+      component.addIngredients(component.slForm);
+      expect(component.shoppinglistService.getIngredient(0).amount).toBe(ingredient.amount)
+      expect(component.shoppinglistService.getIngredient(0).name).toBe(ingredient.name)
+      fixture.detectChanges();
+      fixture.whenStable().then(()=>{
+        expect(component.slForm.value).toBeNull;
+        expect(component.editMode).toBe(false)
+      })
+    })
+  });
+
+  it('should add an ingredient when the editMode is off', ()=>{
+    component.shoppinglistService.addIngredients(ingredient);
+    component.shoppinglistService.startedEditing.next(0);
+    component.editMode = false;
+
+    fixture.detectChanges();
+    fixture.whenStable().then(()=>{
+      component.addIngredients(component.slForm);
+      expect(component.shoppinglistService.getIngredient(0).amount).toBe(ingredient.amount)
+      expect(component.shoppinglistService.getIngredient(0).name).toBe(ingredient.name)
+      fixture.detectChanges();
+      fixture.whenStable().then(()=>{
+        expect(component.slForm.value).toBeNull;
+        expect(component.editMode).toBe(false)
+      })
+    })
+  });
+
 })

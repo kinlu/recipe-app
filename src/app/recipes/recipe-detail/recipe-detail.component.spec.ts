@@ -14,7 +14,7 @@ import { Observable } from 'rxjs/Observable';
 
 const sinon = require('sinon')
 
-describe('Recipe detail component', () => {
+describe('Recipe detail component - unit test', () => {
   let params: Observable<Params>;
   let fixture: ComponentFixture<RecipeDetailComponent>;
   let component: RecipeDetailComponent;
@@ -93,5 +93,60 @@ describe('Recipe detail component', () => {
 
     component.onDeleteRecipe();
     expect(recipeService.removeRecipe.calledWith(0)).toBe(true);
+  });
+})
+
+describe('Recipe detail component - integration test', () => {
+  let params: Observable<Params>;
+  let fixture: ComponentFixture<RecipeDetailComponent>;
+  let component: RecipeDetailComponent;
+  let router;
+  
+  beforeEach(async(() => {
+    params = of({
+      id: '0'
+    });
+
+    router = sinon.createStubInstance(Router);
+    router.navigate.withArgs(["/shopping-list"]).returnsThis();
+
+    TestBed.configureTestingModule({
+      declarations: [RecipeDetailComponent],
+      providers: [
+        { provide: ActivatedRoute, useValue: {params} },
+        { provide: Router, useValue: router },
+        ShoppinglistService,
+        RecipeService,
+      ],
+    });
+    fixture = TestBed.createComponent(RecipeDetailComponent);
+
+    component = fixture.componentInstance;
+
+    component.ngOnInit(); 
+
+  }));
+
+  it('should init the component with the given recipe', () => {
+
+    expect(component.recipe.name).toBe('Chinese Chicken')
+
+  });
+
+  it('should add recipe to shopping list', () => {
+
+    component.addToShoppingList();
+    expect(component.shoppingListService.ingredients[0].name).toBe('Chicken Portions')
+    expect(component.shoppingListService.ingredients[0].amount).toBe(4)
+    expect(component.shoppingListService.ingredients[1].name).toBe('Chinese spices')
+    expect(component.shoppingListService.ingredients[1].amount).toBe(1)
+  });
+
+  it('should delete the recipe', () => {
+
+    component.onDeleteRecipe();
+    component.recipeService.getRecipes().forEach((function(cur){
+      expect(cur.name == 'Chinese Chicken').toBe(false)
+    }))
   });
 })
