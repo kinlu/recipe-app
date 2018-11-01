@@ -1,4 +1,4 @@
-# Test Plan for recipe-app
+# Test plan for recipe-app
 
 ## Overview
 
