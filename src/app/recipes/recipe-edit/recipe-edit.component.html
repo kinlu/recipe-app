@@ -1,6 +1,6 @@
 <div class="row">
   <div class="col-xs-4 ">
-    <h3 className="">
+    <h3 className="" id="subject">
       Edit Recipe
     </h3>
   </div>
@@ -44,7 +44,7 @@
       <br>
       <div class="row">
         <div class="col-xs-4">
-          <h3>
+          <h3 id="ingredient_subject">
             Ingredients
           </h3>
         </div>
@@ -54,10 +54,10 @@
         <div class="col-xs-12 margin-top" formArrayName="ingredients">
           <div class="row" *ngFor="let ingredient of recipeEditForm.get('ingredients').controls;let i = index" [formGroupName]="i">
             <div class="col-xs-8 margin">
-              <input class="form-control" type="text" formControlName="name">
+              <input class="form-control" type="text" formControlName="name" id="ingredient_name">
             </div>
             <div class="col-xs-2 margin">
-              <input class="form-control" type="number" formControlName="amount">
+              <input class="form-control" type="number" formControlName="amount" id="ingredient_amount">
             </div>
             <div class="col-xs-2 margin">
               <button type="button" class="btn btn-danger" (click)="deleteIngredient(i)">Delete</button>
