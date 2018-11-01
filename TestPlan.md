@@ -25,7 +25,7 @@ All routers are still stubbed for the test-friendly purpose.
 
 All integration tests are executed with the unit test.
 
-Unit tests are with "- integration test" suffix.
+Integration tests are with "- integration test" suffix.
 
 ### End-to-end test
 
