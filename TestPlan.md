@@ -1,4 +1,4 @@
-# Test Plan for recipe-app
+# Test plan for recipe-app
 
 ## Overview
 
@@ -11,15 +11,21 @@ Aligning with the test pyramid model, the test plan will pursue more amount of u
 
 Unit tests will be applied to those components with logics inside.
 
-To achieve isolation, stubs will be used in unit tests.  The stubs are supported by [sinon](https://sinonjs.org/releases/latest/).
+To achieve isolation, the dependent service modules will be stubbed in unit tests.  The stubs are supported by [sinon](https://sinonjs.org/releases/latest/).
 
 TestBed from angular is adopted to support the unit tests.
 
+Unit tests are with "- unit test" suffix.
+
 ### Integration test
 
-Integration tests will be using all live components.  And it is based on the composition of the whole application.
+Integration tests for component use the real service modules instead of the stubbed one in unit test.
 
-The integration test is here: [app.component.spec.ts](https://github.com/kinlu/recipe-app/blob/master/src/app/app.component.spec.ts)
+All routers are still stubbed for the test-friendly purpose.
+
+All integration tests are executed with the unit test.
+
+Integration tests are with "- integration test" suffix.
 
 ### End-to-end test
 
